@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-amber-50 selection:bg-pink-300">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Judy, Kelly & Andy's Piggy Split! 🐷</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+          },
+          colors: {
+            judy: '#FF6B9B',
+            kelly: '#A06EE1',
+            andy: '#FF9F43',
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- Google Fonts: Fredoka for super friendly round kid typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .bounce-hover:hover {
+      transform: scale(1.05) rotate(-1deg);
+    }
+    .bounce-tap:active {
+      transform: scale(0.92);
+    }
+    .kid-shadow {
+      box-shadow: 0 8px 0px 0px rgba(0, 0, 0, 0.12);
+    }
+    .kid-shadow-lg {
+      box-shadow: 0 12px 0px 0px rgba(0, 0, 0, 0.15);
+    }
+    .kid-shadow-sm {
+      box-shadow: 0 4px 0px 0px rgba(0, 0, 0, 0.1);
+    }
+    .inset-shadow {
+      box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Floating background icons keyframe */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+    .animate-float {
+      animation: floatSlow 4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-gradient-to-b from-amber-100 via-pink-100 to-purple-100 text-slate-800 pb-12 antialiased">
+
+  <!-- Floating playful background decorations -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 opacity-40">
+    <span class="absolute top-10 left-5 text-4xl animate-float">🍕</span>
+    <span class="absolute top-40 right-8 text-5xl animate-float" style="animation-delay: 1s;">🍦</span>
+    <span class="absolute bottom-20 left-10 text-5xl animate-float" style="animation-delay: 2s;">🧸</span>
+    <span class="absolute bottom-40 right-12 text-4xl animate-float" style="animation-delay: 1.5s;">🍿</span>
+  </div>
+
+  <div class="max-w-xl mx-auto px-4 py-4 relative z-10">
+
+    <!-- Top Kid Header -->
+    <header class="text-center my-3">
+      <div class="inline-flex items-center space-x-2 bg-white px-5 py-2.5 rounded-full kid-shadow border-4 border-yellow-300 transform -rotate-1">
+        <span class="text-3xl animate-bounce">🐷</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-pink-500 tracking-wide">Piggy Split!</h1>
+        <span class="text-3xl animate-bounce" style="animation-delay: 0.2s;">✨</span>
+      </div>
+      <p class="text-slate-600 font-bold text-sm mt-2">Judy 🐶 • Kelly 🐱 • Andy 🦊</p>
+    </header>
+
+    <!-- STEP 1: WHO PAID? -->
+    <section class="bg-white rounded-3xl p-5 mb-5 kid-shadow-lg border-4 border-pink-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-extrabold uppercase px-3 py-1 bg-pink-100 text-pink-600 rounded-full">Step 1</span>
+        <h2 class="text-xl font-bold text-slate-800 text-center flex-1 pr-12">Who paid money? 💳</h2>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3" id="payer-buttons">
+        <!-- Judy -->
+        <button onclick="selectPayer('p1')" id="payer-p1" 
+          class="payer-card relative p-3 rounded-2xl border-4 border-pink-300 bg-pink-50 flex flex-col items-center transition-all duration-200 bounce-hover bounce-tap kid-shadow">
+          <div class="w-16 h-16 rounded-full bg-pink-200 border-4 border-white flex items-center justify-center text-4xl mb-1 shadow-sm">
+            🐶
+          </div>
+          <span class="font-extrabold text-pink-600 text-base">Judy</span>
+          <span class="check-icon hidden absolute -top-2 -right-2 bg-emerald-400 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg border-2 border-white shadow-md">✓</span>
+        </button>
+
+        <!-- Kelly -->
+        <button onclick="selectPayer('p2')" id="payer-p2" 
+          class="payer-card relative p-3 rounded-2xl border-4 border-purple-300 bg-purple-50 flex flex-col items-center transition-all duration-200 bounce-hover bounce-tap kid-shadow">
+          <div class="w-16 h-16 rounded-full bg-purple-200 border-4 border-white flex items-center justify-center text-4xl mb-1 shadow-sm">
+            🐱
+          </div>
+          <span class="font-extrabold text-purple-600 text-base">Kelly</span>
+          <span class="check-icon hidden absolute -top-2 -right-2 bg-emerald-400 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg border-2 border-white shadow-md">✓</span>
+        </button>
+
+        <!-- Andy -->
+        <button onclick="selectPayer('p3')" id="payer-p3" 
+          class="payer-card relative p-3 rounded-2xl border-4 border-amber-300 bg-amber-50 flex flex-col items-center transition-all duration-200 bounce-hover bounce-tap kid-shadow">
+          <div class="w-16 h-16 rounded-full bg-amber-200 border-4 border-white flex items-center justify-center text-4xl mb-1 shadow-sm">
+            🦊
+          </div>
+          <span class="font-extrabold text-amber-600 text-base">Andy</span>
+          <span class="check-icon hidden absolute -top-2 -right-2 bg-emerald-400 text-white w-8 h-8 rounded-full flex items-center justify-center text-lg border-2 border-white shadow-md">✓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: WHAT WAS IT FOR? -->
+    <section class="bg-white rounded-3xl p-5 mb-5 kid-shadow-lg border-4 border-purple-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-extrabold uppercase px-3 py-1 bg-purple-100 text-purple-600 rounded-full">Step 2</span>
+        <h2 class="text-xl font-bold text-slate-800 text-center flex-1 pr-12">What did you get? 🎁</h2>
+      </div>
+
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2" id="item-buttons">
+        <button onclick="selectItem('Pizza 🍕')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🍕</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Pizza</span>
+        </button>
+        <button onclick="selectItem('Ice Cream 🍦')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🍦</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Ice Cream</span>
+        </button>
+        <button onclick="selectItem('Toys 🧸')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🧸</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Toys</span>
+        </button>
+        <button onclick="selectItem('Movies 🍿')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🍿</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Movies</span>
+        </button>
+        <button onclick="selectItem('Juice 🥤')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🥤</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Juice</span>
+        </button>
+        <button onclick="selectItem('Treats 🎁')" class="item-btn p-2 rounded-2xl border-2 border-slate-200 bg-slate-50 flex flex-col items-center bounce-tap transition">
+          <span class="text-3xl">🎁</span>
+          <span class="text-xs font-bold text-slate-600 mt-1">Treats</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 3: HOW MUCH? -->
+    <section class="bg-white rounded-3xl p-5 mb-5 kid-shadow-lg border-4 border-yellow-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-extrabold uppercase px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full">Step 3</span>
+        <h2 class="text-xl font-bold text-slate-800 text-center flex-1 pr-12">How many coins? 🪙</h2>
+      </div>
+
+      <!-- Price Display Box -->
+      <div class="bg-yellow-50 rounded-2xl p-3 border-4 border-yellow-300 text-center mb-4 inset-shadow">
+        <span class="text-sm font-bold text-yellow-700 block mb-1">Total Cost:</span>
+        <div class="text-4xl font-black text-yellow-600 flex items-center justify-center space-x-1">
+          <span>$</span>
+          <span id="amount-display">0</span>
+        </div>
+      </div>
+
+      <!-- Dollar Preset Buttons -->
+      <div class="grid grid-cols-5 gap-2 mb-3">
+        <button onclick="addPresetAmount(1)" class="py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-white font-black text-base kid-shadow-sm bounce-tap border-2 border-amber-500">
+          +$1
+        </button>
+        <button onclick="addPresetAmount(5)" class="py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-white font-black text-base kid-shadow-sm bounce-tap border-2 border-emerald-500">
+          +$5
+        </button>
+        <button onclick="addPresetAmount(10)" class="py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-white font-black text-base kid-shadow-sm bounce-tap border-2 border-sky-500">
+          +$10
+        </button>
+        <button onclick="addPresetAmount(20)" class="py-2.5 rounded-xl bg-indigo-400 hover:bg-indigo-300 text-white font-black text-base kid-shadow-sm bounce-tap border-2 border-indigo-500">
+          +$20
+        </button>
+        <button onclick="addPresetAmount(50)" class="py-2.5 rounded-xl bg-pink-400 hover:bg-pink-300 text-white font-black text-base kid-shadow-sm bounce-tap border-2 border-pink-500">
+          +$50
+        </button>
+      </div>
+
+      <!-- Quick Clear button -->
+      <div class="text-right">
+        <button onclick="clearAmount()" class="text-xs font-bold text-rose-500 hover:underline px-2 py-1">
+          <i class="fa-solid fa-rotate-left"></i> Reset Amount
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 4: WHO SHARED? -->
+    <section class="bg-white rounded-3xl p-5 mb-6 kid-shadow-lg border-4 border-emerald-200">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-extrabold uppercase px-3 py-1 bg-emerald-100 text-emerald-600 rounded-full">Step 4</span>
+        <h2 class="text-xl font-bold text-slate-800 text-center flex-1 pr-12">Who ate / played? 🤝</h2>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <!-- Judy Share -->
+        <button onclick="toggleSharer('p1')" id="sharer-p1" 
+          class="sharer-card p-3 rounded-2xl border-4 border-emerald-400 bg-emerald-50 flex flex-col items-center bounce-tap transition opacity-100 kid-shadow">
+          <span class="text-3xl mb-1">🐶</span>
+          <span class="font-extrabold text-emerald-700 text-sm">Judy</span>
+          <span class="status-badge text-[10px] font-black uppercase text-emerald-600 bg-emerald-200 px-2 py-0.5 rounded-full mt-1">Included</span>
+        </button>
+
+        <!-- Kelly Share -->
+        <button onclick="toggleSharer('p2')" id="sharer-p2" 
+          class="sharer-card p-3 rounded-2xl border-4 border-emerald-400 bg-emerald-50 flex flex-col items-center bounce-tap transition opacity-100 kid-shadow">
+          <span class="text-3xl mb-1">🐱</span>
+          <span class="font-extrabold text-emerald-700 text-sm">Kelly</span>
+          <span class="status-badge text-[10px] font-black uppercase text-emerald-600 bg-emerald-200 px-2 py-0.5 rounded-full mt-1">Included</span>
+        </button>
+
+        <!-- Andy Share -->
+        <button onclick="toggleSharer('p3')" id="sharer-p3" 
+          class="sharer-card p-3 rounded-2xl border-4 border-emerald-400 bg-emerald-50 flex flex-col items-center bounce-tap transition opacity-100 kid-shadow">
+          <span class="text-3xl mb-1">🦊</span>
+          <span class="font-extrabold text-emerald-700 text-sm">Andy</span>
+          <span class="status-badge text-[10px] font-black uppercase text-emerald-600 bg-emerald-200 px-2 py-0.5 rounded-full mt-1">Included</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- BIG ADD BUTTON -->
+    <button onclick="addExpense()" class="w-full py-4 bg-gradient-to-r from-emerald-400 to-teal-500 hover:from-emerald-500 hover:to-teal-600 text-white font-black text-2xl rounded-3xl kid-shadow-lg border-4 border-emerald-300 bounce-tap mb-8 flex items-center justify-center space-x-3">
+      <span>ADD TO PIGGY!</span>
+      <span class="text-3xl">🎉</span>
+    </button>
+
+    <!-- WHO OWES WHO (SUPER VISUAL SETTLEMENT) -->
+    <section class="bg-gradient-to-b from-indigo-500 to-purple-600 rounded-3xl p-6 text-white kid-shadow-lg mb-6 border-4 border-purple-300">
+      <div class="text-center mb-4">
+        <h2 class="text-2xl font-black flex items-center justify-center space-x-2">
+          <span>Who Gives Who Coins?</span>
+          <span>🪙</span>
+        </h2>
+        <p class="text-purple-200 text-xs font-bold mt-1">Easy settlement helper</p>
+      </div>
+
+      <!-- Arrow Action Cards -->
+      <div id="settlement-cards" class="space-y-3 mb-5">
+        <!-- Dynamically filled -->
+      </div>
+
+      <!-- Big Settle Up / All Done Button -->
+      <button onclick="settleAll()" class="w-full py-3.5 bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black text-xl rounded-2xl kid-shadow border-4 border-yellow-200 bounce-tap flex items-center justify-center space-x-2">
+        <span class="text-2xl">✨</span>
+        <span>ALL DONE / SETTLE UP!</span>
+        <span class="text-2xl">🎈</span>
+      </button>
+    </section>
+
+    <!-- EXPENSE LOG (VISUAL RECENT ITEMS) -->
+    <section class="bg-white rounded-3xl p-5 kid-shadow-lg border-4 border-slate-200">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-lg font-extrabold text-slate-800 flex items-center space-x-2">
+          <span>Piggy Bank History</span>
+          <span>📜</span>
+        </h3>
+        <button onclick="clearHistory()" class="text-xs font-bold text-slate-400 hover:text-rose-500">Clear All</button>
+      </div>
+
+      <div id="history-list" class="space-y-2.5">
+        <!-- Populated via JS -->
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Audio Sound Synthesizer via Web Audio API -->
+  <script>
+    // Audio Context for Kid Sound Effects
+    let audioCtx = null;
+
+    function playKidSound(type) {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'pop') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.linearRampToValueAtTime(0, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'coin') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(987.77, now); // B5
+          osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.linearRampToValueAtTime(0, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'fanfare') {
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g);
+            g.connect(audioCtx.destination);
+            o.type = 'sine';
+            o.frequency.setValueAtTime(freq, now + idx * 0.08);
+            g.gain.setValueAtTime(0.2, now + idx * 0.08);
+            g.gain.linearRampToValueAtTime(0, now + idx * 0.08 + 0.2);
+            o.start(now + idx * 0.08);
+            o.stop(now + idx * 0.08 + 0.2);
+          });
+        }
+      } catch (e) {
+        // Audio fallback silent
+      }
+    }
+
+    // STATE
+    const PEOPLE = [
+      { id: 'p1', name: 'Judy', emoji: '🐶', color: 'pink' },
+      { id: 'p2', name: 'Kelly', emoji: '🐱', color: 'purple' },
+      { id: 'p3', name: 'Andy', emoji: '🦊', color: 'amber' }
+    ];
+
+    let currentPayer = 'p1';
+    let currentItem = 'Pizza 🍕';
+    let currentAmount = 0;
+    let sharers = { 'p1': true, 'p2': true, 'p3': true };
+    let expenses = [];
+
+    // INIT
+    window.onload = function() {
+      loadStorage();
+      if (expenses.length === 0) {
+        // Starter kid friendly expenses
+        expenses = [
+          { id: '1', title: 'Ice Cream 🍦', payerId: 'p1', amount: 12, sharers: ['p1', 'p2', 'p3'] },
+          { id: '2', title: 'Toys 🧸', payerId: 'p3', amount: 15, sharers: ['p1', 'p2', 'p3'] }
+        ];
+        saveStorage();
+      }
+      selectPayer('p1', false);
+      selectItem('Pizza 🍕', false);
+      updateApp();
+    };
+
+    function saveStorage() {
+      localStorage.setItem('piggy_split_kids_data', JSON.stringify(expenses));
+    }
+
+    function loadStorage() {
+      const data = localStorage.getItem('piggy_split_kids_data');
+      if (data) {
+        try { expenses = JSON.parse(data); } catch(e){}
+      }
+    }
+
+    // UI CONTROLS
+    function selectPayer(id, sound = true) {
+      if (sound) playKidSound('pop');
+      currentPayer = id;
+
+      PEOPLE.forEach(p => {
+        const btn = document.getElementById(`payer-${p.id}`);
+        const check = btn.querySelector('.check-icon');
+        if (p.id === id) {
+          btn.classList.add('ring-4', 'ring-pink-400', 'scale-105');
+          check.classList.remove('hidden');
+        } else {
+          btn.classList.remove('ring-4', 'ring-pink-400', 'scale-105');
+          check.classList.add('hidden');
+        }
+      });
+    }
+
+    function selectItem(itemName, sound = true) {
+      if (sound) playKidSound('pop');
+      currentItem = itemName;
+
+      const buttons = document.querySelectorAll('.item-btn');
+      buttons.forEach(btn => {
+        if (btn.innerText.includes(itemName.split(' ')[0])) {
+          btn.classList.add('border-purple-500', 'bg-purple-100', 'scale-105');
+        } else {
+          btn.classList.remove('border-purple-500', 'bg-purple-100', 'scale-105');
+        }
+      });
+    }
+
+    function addPresetAmount(num) {
+      playKidSound('coin');
+      currentAmount += num;
+      document.getElementById('amount-display').innerText = currentAmount;
+    }
+
+    function clearAmount() {
+      playKidSound('pop');
+      currentAmount = 0;
+      document.getElementById('amount-display').innerText = '0';
+    }
+
+    function toggleSharer(id) {
+      playKidSound('pop');
+      sharers[id] = !sharers[id];
+
+      const card = document.getElementById(`sharer-${id}`);
+      const badge = card.querySelector('.status-badge');
+
+      if (sharers[id]) {
+        card.classList.remove('opacity-40', 'border-slate-300', 'bg-slate-100');
+        card.classList.add('border-emerald-400', 'bg-emerald-50');
+        badge.innerText = 'Included';
+        badge.className = 'status-badge text-[10px] font-black uppercase text-emerald-600 bg-emerald-200 px-2 py-0.5 rounded-full mt-1';
+      } else {
+        card.classList.add('opacity-40', 'border-slate-300', 'bg-slate-100');
+        card.classList.remove('border-emerald-400', 'bg-emerald-50');
+        badge.innerText = 'Skipped';
+        badge.className = 'status-badge text-[10px] font-black uppercase text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full mt-1';
+      }
+    }
+
+    // ADD EXPENSE
+    function addExpense() {
+      if (currentAmount <= 0) {
+        alert("Please add some coins first! 🪙");
+        return;
+      }
+
+      const activeSharers = Object.keys(sharers).filter(k => sharers[k]);
+      if (activeSharers.length === 0) {
+        alert("Please pick at least one person who shared! 🤝");
+        return;
+      }
+
+      const newExp = {
+        id: Date.now().toString(),
+        title: currentItem,
+        payerId: currentPayer,
+        amount: currentAmount,
+        sharers: activeSharers
+      };
+
+      expenses.unshift(newExp);
+      saveStorage();
+
+      playKidSound('fanfare');
+      confetti({
+        particleCount: 50,
+        spread: 60,
+        origin: { y: 0.7 }
+      });
+
+      // Reset
+      currentAmount = 0;
+      document.getElementById('amount-display').innerText = '0';
+
+      updateApp();
+    }
+
+    // SETTLEMENT CALCULATOR
+    function updateApp() {
+      renderSettlement();
+      renderHistory();
+    }
+
+    function renderSettlement() {
+      const balances = { 'p1': 0, 'p2': 0, 'p3': 0 };
+
+      expenses.forEach(exp => {
+        const amt = exp.amount;
+        // Payer gains credit
+        balances[exp.payerId] += amt;
+
+        // Sharers owe equal slice
+        const share = amt / exp.sharers.length;
+        exp.sharers.forEach(sId => {
+          balances[sId] -= share;
+        });
+      });
+
+      // Min cash flow settlement
+      const debtors = [];
+      const creditors = [];
+
+      Object.keys(balances).forEach(id => {
+        const b = Math.round(balances[id] * 100) / 100;
+        if (b < -0.01) debtors.push({ id, amount: -b });
+        if (b > 0.01) creditors.push({ id, amount: b });
+      });
+
+      const transactions = [];
+      let i = 0, j = 0;
+
+      while (i < debtors.length && j < creditors.length) {
+        const d = debtors[i];
+        const c = creditors[j];
+        const min = Math.min(d.amount, c.amount);
+
+        transactions.push({
+          from: d.id,
+          to: c.id,
+          amount: Math.round(min)
+        });
+
+        d.amount -= min;
+        c.amount -= min;
+
+        if (d.amount <= 0.01) i++;
+        if (c.amount <= 0.01) j++;
+      }
+
+      const container = document.getElementById('settlement-cards');
+      container.innerHTML = '';
+
+      if (transactions.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white/10 rounded-2xl p-4 text-center border-2 border-white/20">
+            <span class="text-4xl block mb-1">🎉</span>
+            <p class="font-bold text-lg">Everyone is all square!</p>
+            <p class="text-xs text-purple-200">No coins owed to anyone!</p>
+          </div>
+        `;
+        return;
+      }
+
+      transactions.forEach(t => {
+        const fromP = PEOPLE.find(p => p.id === t.from);
+        const toP = PEOPLE.find(p => p.id === t.to);
+
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl p-3 text-slate-800 flex items-center justify-between border-2 border-yellow-300 kid-shadow-sm";
+        card.innerHTML = `
+          <div class="flex items-center space-x-2">
+            <span class="text-3xl">${fromP.emoji}</span>
+            <div>
+              <p class="font-extrabold text-sm">${fromP.name}</p>
+              <p class="text-[10px] font-bold text-slate-400 uppercase">Gives</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-lg font-black text-emerald-600 bg-emerald-100 px-3 py-0.5 rounded-full">
+              $${t.amount} 🪙
+            </span>
+            <span class="text-xs text-slate-400 mt-0.5">➡️</span>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <div class="text-right">
+              <p class="font-extrabold text-sm">${toP.name}</p>
+              <p class="text-[10px] font-bold text-slate-400 uppercase">Gets</p>
+            </div>
+            <span class="text-3xl">${toP.emoji}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history-list');
+      container.innerHTML = '';
+
+      if (expenses.length === 0) {
+        container.innerHTML = `
+          <p class="text-center text-xs text-slate-400 py-4 font-bold">Piggy Bank is empty! 🐷</p>
+        `;
+        return;
+      }
+
+      expenses.forEach(exp => {
+        const payer = PEOPLE.find(p => p.id === exp.payerId);
+        const card = document.createElement('div');
+        card.className = "p-3 bg-slate-50 rounded-2xl border-2 border-slate-200 flex items-center justify-between";
+        card.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <span class="text-3xl">${payer.emoji}</span>
+            <div>
+              <p class="font-extrabold text-sm text-slate-700">${exp.title}</p>
+              <p class="text-xs text-slate-400 font-bold">Paid by ${payer.name}</p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <span class="font-black text-emerald-600 text-lg">$${exp.amount}</span>
+            <button onclick="deleteExpense('${exp.id}')" class="text-slate-300 hover:text-rose-500 p-1 text-sm">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteExpense(id) {
+      playKidSound('pop');
+      expenses = expenses.filter(x => x.id !== id);
+      saveStorage();
+      updateApp();
+    }
+
+    function clearHistory() {
+      if (confirm('Reset piggy bank history?')) {
+        playKidSound('pop');
+        expenses = [];
+        saveStorage();
+        updateApp();
+      }
+    }
+
+    function settleAll() {
+      playKidSound('fanfare');
+      confetti({
+        particleCount: 120,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+
+      setTimeout(() => {
+        if (confirm('Yay! Celebrate settlement! Clear all current history?')) {
+          expenses = [];
+          saveStorage();
+          updateApp();
+        }
+      }, 500);
+    }
+  </script>
+</body>
+</html>
